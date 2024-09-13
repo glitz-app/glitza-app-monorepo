@@ -4,7 +4,7 @@ import Image from "next/image";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
-      <nav className="grid h-[60px] w-full grid-cols-3 items-center border-b border-neutral-200 bg-white pl-1 pr-3 md:pl-2.5 md:pr-5">
+      <nav className="fixed left-0 top-0 z-40 grid h-[60px] w-full grid-cols-3 items-center border-b border-neutral-200 bg-white pl-3 pr-3 md:pr-5">
         <div className="font-montserrat col-span-1 flex items-center gap-3 font-bold">
           <Image
             src="/images/glitz_logo.svg"
@@ -21,10 +21,19 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <SignInButton />
           </SignedOut>
           <SignedIn>
-            <UserButton />
+            <UserButton
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: "w-[36px] h-[36px]",
+                  avatarBox: "w-[36px] h-[36px]",
+                },
+              }}
+            />
           </SignedIn>
         </div>
       </nav>
+      {/* ---- nav spacer ----  */}
+      <div className="h-[60px]"></div>
       <div className="flex w-full">
         <section className="h-[calc(100vh-60px)] w-[60px] items-center border-r border-neutral-200 bg-white px-1"></section>
         <main className="h-full w-[calc(100%-60px)]">{children}</main>

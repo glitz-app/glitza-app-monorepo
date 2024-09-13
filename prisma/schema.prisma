@@ -10,6 +10,7 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+// Post is just an example
 model Post {
     id        Int      @id @default(autoincrement())
     name      String
@@ -17,4 +18,65 @@ model Post {
     updatedAt DateTime @updatedAt
 
     @@index([name])
+}
+
+enum ImageProjectStatus {
+    CREATED
+    IN_PROGRESS
+    COMPLETED
+    DELETED
+}
+
+model ImageProject {
+    id              String          @id @default(uuid())
+    status          String          @default("CREATED")
+    name            String?
+    firstModule     Module?         @relation("FirstModule", fields: [firstModuleId], references: [id])
+    firstModuleId   String?         @unique
+    modules         Module[]
+    moduleResults   ModuleResult[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+}
+
+model ModuleType {
+    id              String          @id @default(uuid())
+    name            String          @unique
+    description     String
+    modules         Module[]        
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+}
+
+model Module {
+    id              String          @id @default(uuid())
+    type            ModuleType      @relation(fields: [typeId], references: [id])
+    typeId          String
+    results         ModuleResult[]
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+    imageProject    ImageProject?   @relation(fields: [imageProjectId], references: [id])
+    imageProjectId  String?
+    firstModuleFor  ImageProject?   @relation("FirstModule")
+    previousModule  Module?         @relation("ModuleChain", fields: [previousModuleId], references: [id])
+    nextModule      Module?         @relation("ModuleChain")
+    previousModuleId String?        @unique
+
+    @@index([typeId])
+    @@index([imageProjectId])
+}
+
+model ModuleResult {
+    id              String          @id @default(uuid())
+    imageUrl        String
+    prompt          Json
+    module          Module          @relation(fields: [moduleId], references: [id])
+    moduleId        String
+    imageProject    ImageProject    @relation(fields: [imageProjectId], references: [id])
+    imageProjectId  String
+    createdAt       DateTime        @default(now())
+    updatedAt       DateTime        @updatedAt
+
+    @@index([moduleId])
+    @@index([imageProjectId])
 }

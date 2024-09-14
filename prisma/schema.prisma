@@ -31,6 +31,7 @@ model ImageProject {
     id              String          @id @default(uuid())
     status          String          @default("CREATED")
     name            String?
+    userId          String
     firstModule     Module?         @relation("FirstModule", fields: [firstModuleId], references: [id])
     firstModuleId   String?         @unique
     modules         Module[]

@@ -16,7 +16,7 @@ interface ModuleCardProps {
 
 const ModuleCard = ({ module }: ModuleCardProps) => {
   return (
-    <Card className="relative max-w-md rounded-xl p-4">
+    <Card className="relative max-w-md rounded-xl p-4 shadow-md shadow-[#BEBCFF]/10">
       <h2 className="text-lg font-bold">{module.name}</h2>
       <div className="absolute right-2 top-2">
         <HoverCard>

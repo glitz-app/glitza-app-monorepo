@@ -26,14 +26,22 @@ import { db } from "@/server/db";
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req } = opts;
-  const session = getAuth(req);
-  const userId = session.userId;
+// export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+//   const { req } = opts;
+//   const session = getAuth(req);
+//   const userId = session.userId;
 
+//   return {
+//     db,
+//     userId,
+//   };
+// };
+export const createTRPCContext = async (opts: {
+  auth: ReturnType<typeof getAuth>;
+}) => {
   return {
     db,
-    userId,
+    ...opts,
   };
 };
 
@@ -118,13 +126,13 @@ export const publicProcedure = t.procedure;
  */
 export const protectedProcedure = t.procedure.use(
   t.middleware(({ ctx, next }) => {
-    if (!ctx.userId) {
+    if (!ctx.auth.userId) {
       throw new TRPCError({ code: "UNAUTHORIZED" });
     }
     return next({
       ctx: {
         ...ctx,
-        userId: ctx.userId,
+        userId: ctx.auth.userId,
       },
     });
   }),

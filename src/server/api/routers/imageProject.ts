@@ -72,6 +72,36 @@ export const imageProjectRouter = createTRPCRouter({
       });
     }),
 
+  // Create a module and add it to the project
+  addNewModule: protectedProcedure
+    .input(
+      z.object({
+        imageProjectId: z.string(),
+        moduleTypeId: z.string(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const project = await ctx.db.imageProject.findUnique({
+        where: { id: input.imageProjectId, userId: ctx.userId },
+      });
+
+      if (!project) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Image project not found",
+        });
+      }
+
+      const newModule = await ctx.db.module.create({
+        data: {
+          typeId: input.moduleTypeId,
+          imageProjectId: input.imageProjectId,
+        },
+      });
+
+      return newModule;
+    }),
+
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

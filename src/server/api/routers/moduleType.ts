@@ -7,6 +7,7 @@ export const moduleTypeRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         description: z.string(),
+        isFirst: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -14,6 +15,7 @@ export const moduleTypeRouter = createTRPCRouter({
         data: {
           name: input.name,
           description: input.description,
+          isFirst: input.isFirst ?? false,
         },
       });
     }),
@@ -35,6 +37,7 @@ export const moduleTypeRouter = createTRPCRouter({
         id: z.string(),
         name: z.string().optional(),
         description: z.string().optional(),
+        isFirst: z.boolean().optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,6 +46,7 @@ export const moduleTypeRouter = createTRPCRouter({
         data: {
           name: input.name,
           description: input.description,
+          isFirst: input.isFirst,
         },
       });
     }),

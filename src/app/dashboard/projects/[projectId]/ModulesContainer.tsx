@@ -4,32 +4,43 @@ import ModuleCard from "@/app/_components/ModuleCard";
 import { cn } from "@/lib/utils";
 import { PlusIcon } from "lucide-react";
 import React from "react";
+import AddModuleContainer from "./AddModuleContainer";
+import { api } from "@/trpc/react";
+import type { Module } from "@prisma/client";
 
-const modules = [
-  {
-    id: 1,
-    name: "Module 1",
-    description: "Module description goes here.",
-  },
-  {
-    id: 2,
-    name: "Module 2",
-    description: "Module description goes here.",
-  },
-  {
-    id: 3,
-    name: "Module 3",
-    description: "Module description goes here.",
-  },
-];
+const ModulesContainer: React.FC<{ projectId: string }> = ({ projectId }) => {
+  const {
+    data: imageProject,
+    error,
+    isLoading,
+    refetch,
+  } = api.imageProject.getById.useQuery({ id: projectId });
 
-const ModulesContainer: React.FC = () => {
+  const modules = imageProject?.modules;
+
   const [isAddModuleOpen, setIsAddModuleOpen] = React.useState(false);
   const SIDEBAR_WIDTH = 400;
+
+  const addNewModuleToProject = api.imageProject.addNewModule.useMutation({
+    onSuccess: () => {
+      // Refetch the modules query
+      void refetch();
+      setIsAddModuleOpen(false);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   const handleCloseAddModule = () => {
     setIsAddModuleOpen(false);
   };
+
+  const handleAddModule = (moduleTypeId: string) => {
+    addNewModuleToProject.mutate({ imageProjectId: projectId, moduleTypeId });
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="relative h-full w-full">
@@ -40,14 +51,15 @@ const ModulesContainer: React.FC = () => {
         }}
       >
         <div className="mx-auto flex max-w-md flex-col">
-          {modules.map((module, index) => (
-            <React.Fragment key={module.id}>
-              <ModuleCard module={module} />
-              {index < modules.length - 1 && (
-                <div className="mx-auto h-8 w-[1px] bg-gray-300" />
-              )}
-            </React.Fragment>
-          ))}
+          {!!modules?.length &&
+            modules.map((module: Module, index) => (
+              <React.Fragment key={module.id}>
+                <ModuleCard module={module} />
+                {index < modules.length - 1 && (
+                  <div className="mx-auto h-8 w-[1px] bg-gray-300" />
+                )}
+              </React.Fragment>
+            ))}
 
           <div className="flex items-center justify-center pt-4">
             <AddModuleButton
@@ -60,7 +72,9 @@ const ModulesContainer: React.FC = () => {
       <AddModuleContainer
         open={isAddModuleOpen}
         width={SIDEBAR_WIDTH}
+        starter={true}
         onClose={handleCloseAddModule}
+        onAddModule={handleAddModule}
       />
     </div>
   );
@@ -86,39 +100,5 @@ const AddModuleButton = ({
         <PlusIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform" />
       </div>
     </button>
-  );
-};
-
-const AddModuleContainer = ({
-  open,
-  width = 384,
-  onAddModule,
-  onClose,
-}: {
-  open: boolean;
-  width?: number | string;
-
-  onAddModule?: () => void;
-  onClose?: () => void;
-}) => {
-  const handleAddModule = () => {
-    // setIsAddModuleOpen(!isAddModuleOpen);
-    onAddModule?.();
-  };
-
-  return (
-    <div
-      className={cn(
-        "fixed right-0 top-[60px] h-[calc(100vh-60px)] border-l border-neutral-200 bg-white transition-all duration-200 animate-in slide-in-from-right",
-        !open && "hidden",
-      )}
-      style={{ width }}
-    >
-      <div className="h-full w-full p-4">
-        <h2 className="mb-4 text-xl font-semibold">Add New Module</h2>
-        {/* Add your form or content for adding a new module here */}
-        <p>Module configuration options will go here.</p>
-      </div>
-    </div>
   );
 };

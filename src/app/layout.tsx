@@ -22,7 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html
         lang="en"
-        className={`${GeistSans.variable} ${montserrat.className}`}
+        className={`${montserrat.className} ${GeistSans.variable}`}
       >
         <TRPCReactProvider>
           <body className="min-h-screen w-screen">{children}</body>

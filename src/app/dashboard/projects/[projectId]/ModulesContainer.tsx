@@ -6,7 +6,11 @@ import { PlusIcon } from "lucide-react";
 import React from "react";
 import AddModuleContainer from "./AddModuleContainer";
 import { api } from "@/trpc/react";
-import type { Module } from "@prisma/client";
+import type { Module, ModuleType } from "@prisma/client";
+
+interface ModuleWithType extends Module {
+  type: ModuleType;
+}
 
 const ModulesContainer: React.FC<{ projectId: string }> = ({ projectId }) => {
   const {
@@ -52,9 +56,12 @@ const ModulesContainer: React.FC<{ projectId: string }> = ({ projectId }) => {
       >
         <div className="mx-auto flex max-w-md flex-col">
           {!!modules?.length &&
-            modules.map((module: Module, index) => (
+            modules.map((module: ModuleWithType, index) => (
               <React.Fragment key={module.id}>
-                <ModuleCard module={module} />
+                <ModuleCard
+                  module={module}
+                  collapsed={modules.length - 1 === index ? false : true}
+                />
                 {index < modules.length - 1 && (
                   <div className="mx-auto h-8 w-[1px] bg-gray-300" />
                 )}

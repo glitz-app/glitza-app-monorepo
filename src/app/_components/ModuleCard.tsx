@@ -1,5 +1,10 @@
 import { Card } from "@/components/ui/card";
-import { HoverCard, HoverCardTrigger } from "@/components/ui/hover-card";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { cn } from "@/lib/utils";
 import type { Module, ModuleType } from "@prisma/client";
 import { HelpCircle } from "lucide-react";
 
@@ -9,24 +14,42 @@ interface ModuleWithType extends Module {
 
 interface ModuleCardProps {
   module: ModuleWithType;
+  collapsed: boolean;
 }
 
-const ModuleCard = ({ module }: ModuleCardProps) => {
+const ModuleCard = ({ module, collapsed }: ModuleCardProps) => {
   return (
-    <Card className="relative max-w-md rounded-xl p-4 shadow-md shadow-[#BEBCFF]/10">
-      <h2 className="text-lg font-bold">{module.type.name}</h2>
-      <div className="absolute right-2 top-2">
-        <HoverCard>
-          <HoverCardTrigger>
-            <HelpCircle className="text-neutral-500 hover:text-neutral-700" />
-          </HoverCardTrigger>
-          {/* <HoverCardContent>{module.description}</HoverCardContent> */}
-        </HoverCard>
-      </div>
+    <Card className="relative flex max-w-md flex-col overflow-hidden rounded-xl shadow-md shadow-[#BEBCFF]/10">
+      <section className="z-20 bg-white p-4 shadow-md shadow-neutral-300">
+        <h4 className="font-medium">{module.type.name}</h4>
+        <div className="absolute right-2 top-2">
+          <HoverCard>
+            <HoverCardTrigger>
+              <HelpCircle
+                size={20}
+                className="text-neutral-500 hover:text-neutral-700"
+              />
+            </HoverCardTrigger>
+            <HoverCardContent>{module.type.description}</HoverCardContent>
+          </HoverCard>
+        </div>
+        {/* ---- module configuration section ---- */}
+        <section></section>
+      </section>
 
-      {/* ---- module configuration section ---- */}
-      <section></section>
+      {/* ---- Image results section ---- */}
+      <ModuleResults collapsed={collapsed} />
     </Card>
+  );
+};
+
+const ModuleResults = ({ collapsed }: { collapsed: boolean }) => {
+  return (
+    <section
+      className={cn("z-10 h-48 w-full bg-neutral-200", {
+        "h-20": collapsed,
+      })}
+    ></section>
   );
 };
 

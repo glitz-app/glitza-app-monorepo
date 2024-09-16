@@ -49,7 +49,9 @@ const ModulesContainer: React.FC<{ projectId: string }> = ({ projectId }) => {
   return (
     <div className="relative h-full w-full">
       <section
-        className={cn("w-full p-4 transition-all duration-200")}
+        className={cn(
+          "scrollbar-hide h-full overflow-y-scroll p-4 transition-all duration-200",
+        )}
         style={{
           width: isAddModuleOpen ? `calc(100% - ${SIDEBAR_WIDTH}px)` : "100%",
         }}

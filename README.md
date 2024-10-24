@@ -1,8 +1,8 @@
-# Glitz App
+# HyperJobs App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
 
-Glitz App is a modern web application built with [Next.js](https://nextjs.org/), [Prisma](https://www.prisma.io/), and other powerful technologies. This README provides an overview of the project's structure, setup, and development workflow.
+HyperJobs App is a modern web application built with [Next.js](https://nextjs.org/), [Prisma](https://www.prisma.io/), and other powerful technologies. This README provides an overview of the project's structure, setup, and development workflow.
 
 ## Table of Contents
 
@@ -54,8 +54,8 @@ Glitz App is a modern web application built with [Next.js](https://nextjs.org/),
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/glitz-app.git
-   cd glitz-app
+   git clone https://github.com/your-username/hyperjobs-app.git
+   cd hyperjobs-app
    ```
 
 2. Install the dependencies:
@@ -69,7 +69,7 @@ Glitz App is a modern web application built with [Next.js](https://nextjs.org/),
    Create a `.env` file in the root directory and add the following environment variables:
 
    ```env
-   DATABASE_URL="postgresql://user:password@localhost:5432/glitzdb"
+   DATABASE_URL="postgresql://user:password@localhost:5432/hyperjobsdb"
    NEXT_PUBLIC_CLERK_FRONTEND_API="your-clerk-frontend-api"
    CLERK_API_KEY="your-clerk-api-key"
    ```

@@ -1,32 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
-import Image from "next/image";
-import Link from "next/link";
+import SearchForm from "./SearchForm";
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white">
-      <div className="container flex flex-col items-center justify-center px-4 py-16">
-        <Image
-          src={"/images/glitz_logo.svg"}
-          alt={"Glitz logo"}
-          width={80}
-          height={80}
-          className="mb-8"
-        />
-        <h1 className="mb-24 text-4xl font-bold sm:text-[5rem]">Glitz app</h1>
+    <main className="min-h-screen w-full bg-white">
+      <header className="mx-auto flex h-40 w-full max-w-screen-lg flex-col justify-center p-4">
+        <h1 className="mb-2 font-medium leading-tight">
+          Yet another Web3 job board
+        </h1>
+        <p>Find the best jobs in the Web3 space.</p>
+      </header>
 
-        <div className="col-span-1 flex justify-end">
-          <SignedOut>
-            <SignInButton forceRedirectUrl="/dashboard/projects" />
-          </SignedOut>
-          <SignedIn>
-            <Button variant="ghost">
-              <Link href="/dashboard/projects">Go to dashboard</Link>
-            </Button>
-          </SignedIn>
-        </div>
-      </div>
+      <section className="mx-auto flex w-full max-w-screen-lg flex-col p-4">
+        <SearchForm />
+      </section>
     </main>
   );
 }
